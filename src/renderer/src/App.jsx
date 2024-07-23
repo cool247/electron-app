@@ -2,99 +2,131 @@
 
 import { useState } from 'react'
 import { CONSTANT } from './constants'
+import Modal from './components/modal'
+import TestContent from './components/test-content'
 
 function App() {
   const [state, setState] = useState(CONSTANT)
   const [checkAll, setCheckAll] = useState(false)
+  const [currentRunningTest, setCurrentRunningTest] = useState(null)
+  const [selectedTests, setSelectedTests] = useState([])
 
   function handleCheckAll(check) {
-    console.log(check)
-
     setCheckAll(check)
     setState((ps) => ps.map((psObj) => ({ ...psObj, checked: check })))
   }
   // console.log(state, 'state')
 
-  return (
-    <div className="container">
-      <div className="btn-group">
-        <button>
-          <StartSvg /> Start Session
-        </button>
-        <button>
-          <StopSvg /> Stop Session
-        </button>
-        <button>
-          <ReportSvg /> Last Report
-        </button>
-      </div>
+  function handleStart() {
+    const totalTestToRun = state.filter((test) => test.checked)
+    if (totalTestToRun.length === 0) {
+      alert('Please select at least one to start the test test session.')
+      return
+    }
+    setSelectedTests(totalTestToRun)
+    setCurrentRunningTest(totalTestToRun[0])
+  }
 
-      <table className="main">
-        <thead>
-          <tr>
-            <th>
-              <input
-                type="checkbox"
-                checked={checkAll}
-                onChange={(e) => handleCheckAll(e.target.checked)}
-              />
-            </th>
-            <th>Category</th>
-            <th>Test</th>
-            <th>Auto/Manual</th>
-            <th>Retries</th>
-            <th>Allowed Failure</th>
-            <th>Passed</th>
-            <th>Failed</th>
-            <th>Result</th>
-          </tr>
-        </thead>
-        <tbody>
-          {state.map(
-            ({
-              id,
-              category,
-              test,
-              isAuto,
-              retries,
-              allowedFailure,
-              passed,
-              failed,
-              result,
-              checked
-            }) => (
-              <tr key={id}>
-                <td>
-                  <input
-                    type="checkbox"
-                    checked={checked}
-                    onChange={(e) =>
-                      setState((ps) =>
-                        ps.map((psObj) => {
-                          if (psObj.id === id) {
-                            return { ...psObj, checked: e.target.checked }
-                          } else {
-                            return psObj
-                          }
-                        })
-                      )
-                    }
-                  />
-                </td>
-                <td>{category}</td>
-                <td>{test}</td>
-                <td>{isAuto}</td>
-                <td>{retries}</td>
-                <td>{allowedFailure}</td>
-                <td>{passed}</td>
-                <td>{failed}</td>
-                <td>{result}</td>
-              </tr>
-            )
-          )}
-        </tbody>
-      </table>
-    </div>
+  function handleStop() {
+    setSelectedTests([])
+    setCurrentRunningTest(null)
+  }
+
+  return (
+    <>
+      <Modal
+        show={!!currentRunningTest}
+        handleClose={() => {
+          setCurrentRunningTest(null)
+          setSelectedTests([])
+        }}
+      >
+        <TestContent
+          selectedTests={selectedTests}
+          setCurrentRunningTest={setCurrentRunningTest}
+          currentRunningTest={currentRunningTest}
+        />
+      </Modal>
+      <div className="container">
+        <div className="btn-group">
+          <button disabled={currentRunningTest} onClick={handleStart}>
+            <StartSvg /> Start Session
+          </button>
+          <button onClick={handleStop}>
+            <StopSvg /> Stop Session
+          </button>
+          <button>
+            <ReportSvg /> Last Report
+          </button>
+        </div>
+
+        <table className="main">
+          <thead>
+            <tr>
+              <th>
+                <input
+                  type="checkbox"
+                  checked={checkAll}
+                  onChange={(e) => handleCheckAll(e.target.checked)}
+                />
+              </th>
+              <th>Category</th>
+              <th>Test</th>
+              <th>Auto/Manual</th>
+              <th align="center">Retries</th>
+              <th align="center">Allowed Failure</th>
+              <th align="center">Passed</th>
+              <th align="center">Failed</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {state.map(
+              ({
+                id,
+                category,
+                test,
+                isAuto,
+                retries,
+                allowedFailure,
+                passed,
+                failed,
+                result,
+                checked
+              }) => (
+                <tr key={id}>
+                  <td>
+                    <input
+                      type="checkbox"
+                      checked={checked}
+                      onChange={(e) => {
+                        setState((ps) =>
+                          ps.map((psObj) => {
+                            if (psObj.id === id) {
+                              return { ...psObj, checked: e.target.checked }
+                            } else {
+                              return psObj
+                            }
+                          })
+                        )
+                      }}
+                    />
+                  </td>
+                  <td>{category}</td>
+                  <td>{test}</td>
+                  <td>{isAuto}</td>
+                  <td align="center">{retries}</td>
+                  <td align="center">{allowedFailure}</td>
+                  <td align="center">{passed}</td>
+                  <td align="center">{failed}</td>
+                  <td>{result}</td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
+    </>
   )
 }
 

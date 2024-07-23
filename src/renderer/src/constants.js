@@ -7,8 +7,8 @@ export const RESULT_STATUS = {
 }
 
 export const IS_AUTO = {
-  manual: 'MANUAL',
-  auto: 'AUTO'
+  manual: 'Manual',
+  auto: 'Auto'
 }
 
 export const CONSTANT = [
