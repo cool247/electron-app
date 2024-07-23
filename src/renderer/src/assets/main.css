@@ -1,0 +1,97 @@
+@import './base.css';
+:root{
+  --primary-color:#673ec8;
+  --primary-color-hover:#4b2e90;
+  --background-color:#fbf6ef;
+  --grey-1:#dddddd;
+  --grey-2:#c6c6c6;
+  --grey-3:#e1e1e1;
+}
+
+input[type="checkbox"] {
+  accent-color: var(--primary-color); /* Accent color */
+}
+
+.container{
+  padding-inline: 16px;
+  /* background-color: var(--background-color); */
+  height: 99vh;
+}
+
+/* Basic table styling */
+table.main {
+  width: 100%;
+  border-collapse: collapse;
+  opacity: 1;
+  border: 2px solid var(--grey-2);
+  /* margin: 20px 0; */
+  font-size: 0.85em;
+  box-shadow: 0 0 10px rgba(45, 48, 109, 0.15);
+}
+
+/* Header styling */
+table.main thead {
+  background-color: var(--grey-1);
+  text-align: left;
+  color: var(--primary-color);
+}
+
+
+/* Header cells */
+table.main td {
+  padding: 2px 8px;
+  line-height: 1.4em;
+}
+table.main th{
+  font-weight: 700;
+  padding: 8px;
+  font-size: 1.1em;
+}
+
+/* Table rows */
+table.main tbody tr {
+  border-bottom: 1px solid var(--grey-3);
+}
+
+/* Hover effect */
+table.main tbody tr:nth-of-type(even) {
+  background-color: #e6e8ff;
+}
+
+/* table.main tbody tr:last-of-type {
+  border-bottom: 2px solid var(--primary-color);
+} */
+
+/* Responsive design */
+table.main tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+
+.btn-group {
+  display: flex;
+  gap: 4px;
+  padding-Block: 8px;
+  /* margin: 4px 0; */
+}
+
+.btn-group button {
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  font-size: 0.9em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  transition: background-color 0.15s ease;
+}
+
+.btn-group button:hover {
+  background-color: var(--primary-color-hover);
+}
+
+.btn-group button svg {
+  margin-right: 8px;
+}
